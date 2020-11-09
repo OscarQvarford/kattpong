@@ -1,6 +1,7 @@
 const hamburger = document.getElementById('hamburger');
 const curtain = document.getElementById('curtain');
 const lines = document.getElementsByClassName('hamburger-line');
+const hamburgerItems = document.getElementsByClassName('hamburger-item');
 
 const lineValues = [{
 	transform: ['rotate(0)', 'rotate(45deg)'],

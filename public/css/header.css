@@ -14,7 +14,6 @@
     margin: 20px;
 
     color: rgb(100, 100, 100);
-    font-family: 'Roboto', sans-serif;
     font-size: 1.5rem;
     font-weight: 100;
     letter-spacing: 0.5em;
@@ -28,6 +27,8 @@
     
     width: 2rem;
     height: auto;
+
+    cursor: pointer;
 }
 
 .hamburger-line {
@@ -58,5 +59,23 @@
     background-color: #FFFFFF;
 
     transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+#curtain-contents {
+    position: relative;
+    top: calc(((100vh - (2rem + 40px)) / 2) - ((3em + 4rem) / 2));
+
+    height: auto;
+
+    font-size: 2rem;
+    text-align: center;
+}
+
+#curtain-contents > p {
+    position: relative;
+    margin: 2rem;
+
+    transition-duration: 1s;
     transition-timing-function: ease-in-out;
 }
