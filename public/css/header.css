@@ -80,6 +80,14 @@
 
     opacity: 0;
 
+    font-weight: 200;
+
     transition-duration: 0.1s;
     transition-timing-function: ease-in-out;
+}
+
+#curtain-contents > p > u {
+    border-bottom: 1px solid #000000;
+
+    text-decoration: none;
 }

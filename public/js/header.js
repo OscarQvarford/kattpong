@@ -46,7 +46,7 @@ hamburger.addEventListener('click', () => {
 	}
 
 	let hamburgerItemsIndex = (isActive) ? 0 : hamburgerItems.length - 1;
-	let slideTime = (isActive) ? 115 : 50;
+	let slideDelay = (isActive) ? 120 : 0;
 	const hamburgerItemLoop = () => {
 		setTimeout(() => {
 			if (hamburgerItemsIndex < hamburgerItems.length && hamburgerItemsIndex >= 0) {
@@ -55,8 +55,8 @@ hamburger.addEventListener('click', () => {
 				hamburgerItemsIndex = (isActive) ? hamburgerItemsIndex + 1 : hamburgerItemsIndex - 1;
 				hamburgerItemLoop();
 			}
-		}, slideTime);
+		}, 50);
 	}
 
-	hamburgerItemLoop();
+	setTimeout(hamburgerItemLoop, slideDelay);
 });
