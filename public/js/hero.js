@@ -19,17 +19,26 @@ const draw = () => {
 
   let textSize = h;
   ctx.font = `${textSize}px Arial`;
-  const text = 'Katedralskolans pingissamfund';
-  const textWidth = ctx.measureText(text).width;
-  const widthSizeRatio = textWidth / textSize;
+  const firstText = 'Katedralskolans';
+  const iText = 'pingissamfund';
+  const iTextWidth = ctx.measureText(iText).width;
+  const widthSizeRatio = iTextWidth / textSize;
   const targetWidth = (2 / 3) * w;
   textSize = targetWidth / widthSizeRatio;
+  const textMargin = textSize + 10;
   ctx.font = `${textSize}px Arial`;
+
+  if (w >= 700)
+    ctx.lineWidth = 3;
+  else if (w < 700 && w >= 500)
+    ctx.lineWidth = 2;
+  else
+    ctx.lineWidth = 1;
 
   iMetrics = ctx.measureText('i');
   iWidth = iMetrics.width;
   iActualBoundingBoxAscent = iMetrics.actualBoundingBoxAscent;
-  beforeiWidth = ctx.measureText(text.substr(0, text.indexOf('i'))).width;
+  beforeiWidth = ctx.measureText(iText.substr(0, iText.indexOf('i'))).width;
   ctx.fillStyle = 'rgba(255,255,255,1)';
 
   const easeInOut = (t, b, c, d) => {
@@ -37,8 +46,11 @@ const draw = () => {
   }
 
   const postAnimationDraw = () => {
-    ctx.strokeText(text, 20, 130);
-    ctx.fillRect(beforeiWidth + 20, 130 - iActualBoundingBoxAscent - 2, iWidth, iWidth);
+    ctx.strokeStyle = 'rgba(220, 220, 220, 1)';
+    ctx.strokeText(firstText, 20, 130);
+    ctx.strokeText(iText, 20, 130 + textMargin);
+    
+    ctx.fillRect(beforeiWidth + 20, 130 - iActualBoundingBoxAscent - (iActualBoundingBoxAscent / 10) + textMargin, iWidth, iWidth);
   }
 
   if (drawIndex >= 60 * slideAnimationLength && drawIndex >= 60 * bounceAnimationLength) {
@@ -46,19 +58,20 @@ const draw = () => {
     postAnimationDraw();
 
     ctx.beginPath();
-    ctx.arc(beforeiWidth + 20 + iWidth / 2,  130 - iActualBoundingBoxAscent, iWidth / 2, 0, 2 * Math.PI);
+    ctx.arc(beforeiWidth + 20 + iWidth / 2,  130 - iActualBoundingBoxAscent + textMargin, iWidth / 2, 0, 2 * Math.PI);
     ctx.stroke();
   } else {
     if (drawIndex < 60 * slideAnimationLength) {
-      ctx.strokeStyle = `rgba(0,0,0,${easeInOut(secondsPassed, 0, 1, 0.3)})`;
-      ctx.strokeText(text, 20, easeInOut(secondsPassed, 100, 30, 0.3));
-      ctx.fillRect(beforeiWidth + 20, easeInOut(secondsPassed, 100, 30, 0.3) - iActualBoundingBoxAscent - 2, iWidth, iWidth);
+      ctx.strokeStyle = `rgba(220,220,220,${easeInOut(secondsPassed, 0, 1, 0.3)})`;
+      ctx.strokeText(firstText, 20, easeInOut(secondsPassed, 100, 30, 0.3));
+      ctx.strokeText(iText, 20, easeInOut(secondsPassed, 100, 30, 0.3) + textMargin);
+      ctx.fillRect(beforeiWidth + 20, easeInOut(secondsPassed, 100, 30, 0.3) - iActualBoundingBoxAscent - (iActualBoundingBoxAscent / 10) + textMargin, iWidth, iWidth);
     } else postAnimationDraw();
 
     const animationProps = (start, change, time) => {
       ctx.beginPath();
       ctx.arc(beforeiWidth + 20 + iWidth / 2, 
-              easeInOut(secondsPassed, start, change, time) - iActualBoundingBoxAscent, 
+              easeInOut(secondsPassed, start, change, time) - iActualBoundingBoxAscent + textMargin, 
               iWidth / 2, 0, 2 * Math.PI);
       ctx.stroke();
     }
@@ -80,4 +93,3 @@ const animationInterval = setInterval(draw, 1000 / 60);
 draw();
 
 window.addEventListener('resize', draw);
-
