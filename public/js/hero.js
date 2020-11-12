@@ -20,17 +20,27 @@ const draw = () => {
   let textSize = h;
   ctx.font = `${textSize}px Arial`;
   const firstText = 'Katedralskolans';
-  const iText = 'pingissamfund';
+  const iText = 'pingisförening';
   const iTextWidth = ctx.measureText(iText).width;
   const widthSizeRatio = iTextWidth / textSize;
   const targetWidth = (2 / 3) * w;
   textSize = targetWidth / widthSizeRatio;
   const textMargin = textSize + 10;
+  const offsetY = (h / 4) - (textSize / 2) + textMargin / 5;
   ctx.font = `${textSize}px Arial`;
 
-  if (w >= 700)
+  const addedHeight = 40;
+  const heroText = document.getElementById('hero-text');
+  const heroTextParagraph = document.querySelector('#hero-text > p');
+  heroTextParagraph.style.fontSize = `${(textSize * 2 + 10 + addedHeight) / 8}px`;
+  heroText.style.top = `${h / 4 - textSize - addedHeight / 2 + canvas.offsetTop + 20}px`;
+  heroText.style.right = '30px';
+  ctx.fillStyle = 'rgba(40,40,40,1)';
+  ctx.fillRect(w - 40 - heroText.clientWidth, h / 4 - textSize - addedHeight / 2, heroText.clientWidth + 20, textSize * 2 + 10 + addedHeight);
+
+  if (w >= 800)
     ctx.lineWidth = 3;
-  else if (w < 700 && w >= 500)
+  else if (w < 800 && w >= 500)
     ctx.lineWidth = 2;
   else
     ctx.lineWidth = 1;
@@ -46,11 +56,19 @@ const draw = () => {
   }
 
   const postAnimationDraw = () => {
-    ctx.strokeStyle = 'rgba(220, 220, 220, 1)';
-    ctx.strokeText(firstText, 20, 130);
-    ctx.strokeText(iText, 20, 130 + textMargin);
+    const texts = [firstText, iText];
+    for (let i = 0; i < texts.length; i++) {
+      const gradient = ctx.createLinearGradient(20, 0, ctx.measureText(texts[i]).width + 20, 0);
+      gradient.addColorStop((w - 30 - heroText.clientWidth - 30) / ctx.measureText(texts[i]).width, 'rgba(235, 235, 235, 1)');
+      gradient.addColorStop((w - 30 - heroText.clientWidth - 30) / ctx.measureText(texts[i]).width, 'rgba(55, 55, 55, 1)');
+      ctx.strokeStyle = gradient;
+      if (texts[i] === firstText)
+        ctx.strokeText(firstText, 20, offsetY);
+      else
+        ctx.strokeText(iText, 20, offsetY + textMargin);
+    }
     
-    ctx.fillRect(beforeiWidth + 20, 130 - iActualBoundingBoxAscent - (iActualBoundingBoxAscent / 10) + textMargin, iWidth, iWidth);
+    ctx.fillRect(beforeiWidth + 20, offsetY - iActualBoundingBoxAscent - (iActualBoundingBoxAscent / 10) + textMargin, iWidth, iWidth);
   }
 
   if (drawIndex >= 60 * slideAnimationLength && drawIndex >= 60 * bounceAnimationLength) {
@@ -58,14 +76,23 @@ const draw = () => {
     postAnimationDraw();
 
     ctx.beginPath();
-    ctx.arc(beforeiWidth + 20 + iWidth / 2,  130 - iActualBoundingBoxAscent + textMargin, iWidth / 2, 0, 2 * Math.PI);
+    ctx.arc(beforeiWidth + 20 + iWidth / 2,  offsetY - iActualBoundingBoxAscent + textMargin, iWidth / 2, 0, 2 * Math.PI);
     ctx.stroke();
   } else {
     if (drawIndex < 60 * slideAnimationLength) {
-      ctx.strokeStyle = `rgba(220,220,220,${easeInOut(secondsPassed, 0, 1, 0.3)})`;
-      ctx.strokeText(firstText, 20, easeInOut(secondsPassed, 100, 30, 0.3));
-      ctx.strokeText(iText, 20, easeInOut(secondsPassed, 100, 30, 0.3) + textMargin);
-      ctx.fillRect(beforeiWidth + 20, easeInOut(secondsPassed, 100, 30, 0.3) - iActualBoundingBoxAscent - (iActualBoundingBoxAscent / 10) + textMargin, iWidth, iWidth);
+      const texts = [firstText, iText];
+      for (let i = 0; i < texts.length; i++) {
+        const gradient = ctx.createLinearGradient(20, 0, ctx.measureText(texts[i]).width + 20, 0);
+        gradient.addColorStop((w - 30 - heroText.clientWidth - 30) / ctx.measureText(texts[i]).width, 'rgba(235, 235, 235, 1)');
+        gradient.addColorStop((w - 30 - heroText.clientWidth - 30) / ctx.measureText(texts[i]).width, 'rgba(55, 55, 55, 1)');
+        ctx.strokeStyle = gradient;
+        if (texts[i] === firstText)
+        ctx.strokeText(firstText, 20, easeInOut(secondsPassed, offsetY - 30, 30, 0.3));
+        else
+        ctx.strokeText(iText, 20, easeInOut(secondsPassed, offsetY - 30, 30, 0.3) + textMargin);
+      }
+
+      ctx.fillRect(beforeiWidth + 20, easeInOut(secondsPassed, offsetY - 30, 30, 0.3) - iActualBoundingBoxAscent - (iActualBoundingBoxAscent / 10) + textMargin, iWidth, iWidth);
     } else postAnimationDraw();
 
     const animationProps = (start, change, time) => {
@@ -77,11 +104,11 @@ const draw = () => {
     }
 
     if (drawIndex < 60 * 0.4)
-      animationProps(100, 30, 0.4);
+      animationProps(offsetY - 30, 30, 0.4);
     else if (drawIndex < 60 * 0.6)
-      animationProps(130, -10, 0.2);
+      animationProps(offsetY, -10, 0.2);
     else if (drawIndex < 60 * 0.8)
-      animationProps(130, -10, 0.2);
+      animationProps(offsetY, -10, 0.2);
   }
 
   secondsPassed += 1000 / 60 / 1000;
