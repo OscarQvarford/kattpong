@@ -55,25 +55,20 @@ const draw = () => {
       ctx.fillRect(beforeiWidth + 20, easeInOut(secondsPassed, 100, 30, 0.3) - iActualBoundingBoxAscent - 2, iWidth, iWidth);
     } else postAnimationDraw();
 
-    if (drawIndex < 60 * 0.4) {
+    const animationProps = (start, change, time) => {
       ctx.beginPath();
       ctx.arc(beforeiWidth + 20 + iWidth / 2, 
-              easeInOut(secondsPassed, 100, 30, 0.4) - iActualBoundingBoxAscent, 
-              iWidth / 2, 0, 2 * Math.PI);
-      ctx.stroke();
-    } else if (drawIndex < 60 * 0.6) {
-      ctx.beginPath();
-      ctx.arc(beforeiWidth + 20 + iWidth / 2, 
-              easeInOut(secondsPassed, 130, -10, 0.2) - iActualBoundingBoxAscent, 
-              iWidth / 2, 0, 2 * Math.PI);
-      ctx.stroke();
-    } else if (drawIndex < 60 * 0.8) {
-      ctx.beginPath();
-      ctx.arc(beforeiWidth + 20 + iWidth / 2, 
-              easeInOut(secondsPassed, 130, -10, 0.2) - iActualBoundingBoxAscent, 
+              easeInOut(secondsPassed, start, change, time) - iActualBoundingBoxAscent, 
               iWidth / 2, 0, 2 * Math.PI);
       ctx.stroke();
     }
+
+    if (drawIndex < 60 * 0.4)
+      animationProps(100, 30, 0.4);
+    else if (drawIndex < 60 * 0.6)
+      animationProps(130, -10, 0.2);
+    else if (drawIndex < 60 * 0.8)
+      animationProps(130, -10, 0.2);
   }
 
   secondsPassed += 1000 / 60 / 1000;
