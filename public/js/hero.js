@@ -15,7 +15,9 @@ const draw = () => {
   w = window.innerWidth;
 
   canvas.width = w
-  canvas.height = h / 2;
+  canvas.height = (w / (h / 2) > (16 / 9)) ?
+    h / 1.5:
+    h / 2;
 
   let textSize = h;
   ctx.font = `${textSize}px Arial`;
@@ -26,17 +28,17 @@ const draw = () => {
   const targetWidth = (2 / 3) * w;
   textSize = targetWidth / widthSizeRatio;
   const textMargin = textSize + 10;
-  const offsetY = (h / 4) - (textSize / 2) + textMargin / 5;
+  const offsetY = (canvas.height / 2) - (textSize / 2) + textMargin / 5;
   ctx.font = `${textSize}px Arial`;
 
   const addedHeight = 40;
   const heroText = document.getElementById('hero-text');
   const heroTextParagraph = document.querySelector('#hero-text > p');
   heroTextParagraph.style.fontSize = `${(textSize * 2 + 10 + addedHeight) / 8}px`;
-  heroText.style.top = `${h / 4 - textSize - addedHeight / 2 + canvas.offsetTop + 20}px`;
+  heroText.style.top = `${canvas.height / 2 - textSize - addedHeight / 2 + canvas.offsetTop + 20}px`;
   heroText.style.right = '30px';
   ctx.fillStyle = 'rgba(40,40,40,1)';
-  ctx.fillRect(w - 40 - heroText.clientWidth, h / 4 - textSize - addedHeight / 2, heroText.clientWidth + 20, textSize * 2 + 10 + addedHeight);
+  ctx.fillRect(w - 40 - heroText.clientWidth, canvas.height / 2 - textSize - addedHeight / 2, heroText.clientWidth + 20, textSize * 2 + 10 + addedHeight);
 
   if (w >= 800)
     ctx.lineWidth = 3;
