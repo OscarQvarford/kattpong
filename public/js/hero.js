@@ -35,10 +35,7 @@ const draw = () => {
   const heroText = document.getElementById('hero-text');
   const heroTextParagraph = document.querySelector('#hero-text > p');
   heroTextParagraph.style.fontSize = `${(textSize * 2 + 10 + addedHeight) / 8}px`;
-  heroText.style.top = `${canvas.height / 2 - textSize - addedHeight / 2 + canvas.offsetTop + 20}px`;
   heroText.style.right = '30px';
-  ctx.fillStyle = 'rgba(40,40,40,1)';
-  ctx.fillRect(w - 40 - heroText.clientWidth, canvas.height / 2 - textSize - addedHeight / 2, heroText.clientWidth + 20, textSize * 2 + 10 + addedHeight);
 
   if (w >= 800)
     ctx.lineWidth = 3;
@@ -58,6 +55,11 @@ const draw = () => {
   }
 
   const postAnimationDraw = () => {
+    heroText.style.top = `${canvas.height / 2 - textSize - addedHeight / 2 + canvas.offsetTop + 20}px`;
+    ctx.fillStyle = 'rgba(40,40,40,1)';
+    ctx.fillRect(w - 40 - heroText.clientWidth, canvas.height / 2 - textSize - addedHeight / 2, heroText.clientWidth + 20, textSize * 2 + 10 + addedHeight);
+    
+    ctx.fillStyle = 'rgba(255,255,255,1)';
     const texts = [firstText, iText];
     for (let i = 0; i < texts.length; i++) {
       const gradient = ctx.createLinearGradient(20, 0, ctx.measureText(texts[i]).width + 20, 0);
@@ -82,6 +84,11 @@ const draw = () => {
     ctx.stroke();
   } else {
     if (drawIndex < 60 * slideAnimationLength) {
+      heroText.style.top = `${easeInOut(secondsPassed, canvas.height / 2 - textSize - addedHeight / 2 + canvas.offsetTop + 20 + 30, -30, 0.3)}px`;
+      ctx.fillStyle = 'rgba(40,40,40,1)';
+      ctx.fillRect(w - 40 - heroText.clientWidth, easeInOut(secondsPassed, canvas.height / 2 - textSize - addedHeight / 2, 30, 0.3) - 30, heroText.clientWidth + 20, textSize * 2 + 10 + addedHeight);
+
+      ctx.fillStyle = 'rgba(255,255,255,1)';  
       const texts = [firstText, iText];
       for (let i = 0; i < texts.length; i++) {
         const gradient = ctx.createLinearGradient(20, 0, ctx.measureText(texts[i]).width + 20, 0);
@@ -89,9 +96,9 @@ const draw = () => {
         gradient.addColorStop((w - 30 - heroText.clientWidth - 30) / ctx.measureText(texts[i]).width, 'rgba(55, 55, 55, 1)');
         ctx.strokeStyle = gradient;
         if (texts[i] === firstText)
-        ctx.strokeText(firstText, 20, easeInOut(secondsPassed, offsetY - 30, 30, 0.3));
+          ctx.strokeText(firstText, 20, easeInOut(secondsPassed, offsetY - 30, 30, 0.3));
         else
-        ctx.strokeText(iText, 20, easeInOut(secondsPassed, offsetY - 30, 30, 0.3) + textMargin);
+          ctx.strokeText(iText, 20, easeInOut(secondsPassed, offsetY - 30, 30, 0.3) + textMargin);
       }
 
       ctx.fillRect(beforeiWidth + 20, easeInOut(secondsPassed, offsetY - 30, 30, 0.3) - iActualBoundingBoxAscent - (iActualBoundingBoxAscent / 10) + textMargin, iWidth, iWidth);
