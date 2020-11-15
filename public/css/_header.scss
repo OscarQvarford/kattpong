@@ -52,7 +52,7 @@
 
 #curtain {
   position: fixed;
-  display: none;
+  visibility: hidden;
   z-index: 1;
 
   width: 100%;
