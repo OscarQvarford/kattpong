@@ -1,7 +1,41 @@
+// canvas setup
 const canvas = document.getElementById('hero-bg');
 const ctx = canvas.getContext('2d');
-
-let h, w;
+class Frame {
+    constructor(frameIndex) {
+        this.text = 'Katedralskolans pingisförening';
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        this.frameIndex = frameIndex;
+        this.updateCanvas();
+    }
+    updateCanvas() {
+        const aspectRatio = this.width / this.height;
+        canvas.width = this.width;
+        canvas.height = (aspectRatio > (16 / 9)) ?
+            this.height / 1.5 :
+            this.height / 2;
+    }
+}
+class Heading extends Frame {
+    calculateFontSize() {
+        let fontSize = this.height;
+        ctx.font = `${fontSize}px Arial`;
+        const words = this.text.split(' ');
+        const wordWidths = words.map(word => ctx.measureText(word).width);
+        const longestWordWidth = Math.max(...wordWidths);
+        const targetWidth = this.width * (2 / 3);
+        fontSize = targetWidth / (longestWordWidth / fontSize);
+        ctx.font = `${fontSize}px Arial`;
+    }
+    constructor(frameIndex) {
+        super(frameIndex);
+        this.calculateFontSize();
+    }
+}
+const frame = new Frame(0);
+const heading = new Heading(0);
+/*let h, w;
 let drawIndex = 0;
 let slideAnimationLength = 0.3;
 let bounceAnimationLength = 0.8;
@@ -88,7 +122,7 @@ const draw = () => {
       ctx.fillStyle = 'rgba(40,40,40,1)';
       ctx.fillRect(w - 40 - heroText.clientWidth, easeInOut(secondsPassed, canvas.height / 2 - textSize - addedHeight / 2, 30, 0.3) - 30, heroText.clientWidth + 20, textSize * 2 + 10 + addedHeight);
 
-      ctx.fillStyle = 'rgba(255,255,255,1)';  
+      ctx.fillStyle = 'rgba(255,255,255,1)';
       const texts = [firstText, iText];
       for (let i = 0; i < texts.length; i++) {
         const gradient = ctx.createLinearGradient(20, 0, ctx.measureText(texts[i]).width + 20, 0);
@@ -106,8 +140,8 @@ const draw = () => {
 
     const animationProps = (start, change, time) => {
       ctx.beginPath();
-      ctx.arc(beforeiWidth + 20 + iWidth / 2, 
-              easeInOut(secondsPassed, start, change, time) - iActualBoundingBoxAscent + textMargin, 
+      ctx.arc(beforeiWidth + 20 + iWidth / 2,
+              easeInOut(secondsPassed, start, change, time) - iActualBoundingBoxAscent + textMargin,
               iWidth / 2, 0, 2 * Math.PI);
       ctx.stroke();
     }
@@ -129,3 +163,4 @@ const animationInterval = setInterval(draw, 1000 / 60);
 draw();
 
 window.addEventListener('resize', draw);
+*/ 
